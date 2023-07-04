@@ -1,0 +1,725 @@
+add_library('minim')
+add_library('gifAnimation')
+from math import pi, sin, cos
+def setup():
+    size(1236,2000)
+    global fire0,fire1,fire2,fire3,bullet,ac,p,px,py,s4,s2,s1,s3,n,n1,n2,n3,bu,bu1,bu2,bu3,s
+    
+    global bg1,bg2,bg3,sca,ctime,FinalScores
+    
+    global fx0,fx1,fx2,fx3,fy,bx,by,acx,acy,acs
+    
+    global fw,fh,acw,ach,stime
+    
+    global life,stage,score,dead,dead2
+    
+    global bn1,bn2,gg,song1,song2,song3,song4,minim
+    
+    global acx2,acy2,acw2,ach2,acs2,sca2
+    
+    global boss,HP,HPT,HPX,HPY,HPTX,HPTY,bossx,bossy,HPW,bys,bxs
+    
+    global bys1,bxs1,bys2,bxs2,bys3,bxs3
+    
+    global bx1,by1,bx2,by2,bx3,by3
+    
+    global bullet1,bullet2,bullet3
+    
+    minim = Minim(this)
+    
+    song1 = minim.loadFile("m1.mp3", 2048)
+    
+    song2=minim.loadFile("m2.mp3",2048)
+    
+    song3=minim.loadFile("m3.mp3",2048)
+    
+    song4=minim.loadFile("m4.mp3",2048)
+    
+    gg=loadImage("GameOver.png")
+    
+    boss=Gif(this,"boss.gif")
+    
+    boss.play()
+    
+    HP=loadImage("HP.png")
+    
+    HPT=loadImage("HPT.png")
+    s=10
+    HPX=505
+    HPY=320
+    bossx=500
+    bossy=400
+    HPTX=490
+    HPTY=310
+    HPW=420
+    bys=50
+    bxs=60
+    bu=30
+    bu1=30
+    bu2=30
+    bu3=250
+    n=-1
+    n1=-1
+    n2=-1
+    n3=-1
+    ctime=0
+    stime=0
+    
+    bn1=loadImage("start.png")
+    bn2=loadImage("exit.png")
+    
+    px=800
+    py=1800
+    score=0
+    life=20
+    stage=0
+    bys1=20
+    bxs1=30
+    bxs2=40
+    bys2=30
+    bys3=40
+    bxs3=40
+    FinalScores=0
+    
+    bullet1=[]
+    bullet2=[]
+    bullet3=[]
+    s1=[]
+    s2=[]
+    s3=[]
+    s4=[]
+    bx=[]
+    by=[]
+    bx1=[]
+    by1=[]
+    bx2=[]
+    by2=[]
+    bx3=[]
+    by3=[]
+    sca=[]
+    acs=[]
+    dead=[]
+    dead2=[]
+    bullet=[]
+    ac=[]
+    fire0=[]
+    fire1=[]
+    fire2=[]
+    fire3=[]
+    fx0=[]
+    fx1=[]
+    fx2=[]
+    fx3=[]
+    fy=[]
+    fw=[]
+    fh=[]
+    acx=[]
+    acy=[]
+    acw=[]
+    ach=[]
+    acx2=[]
+    acy2=[]
+    acw2=[]
+    ach2=[]
+    acs2=[]
+    sca2=[]
+    
+    p=loadImage("p.png")
+    bg1=loadImage("bg1.png")
+    bg2=loadImage("bg2.jpg")
+    bg3=loadImage("Window.png")
+    
+    for i in range(10):
+        sca.append(random(0.8,1.2))
+        bx.append(random(100,600))
+        by.append(random(100,300))
+        bx1.append(random(100,600))
+        by1.append(random(100,300))
+        bx2.append(random(100,600))
+        by2.append(random(100,300))
+        bx3.append(random(100,600))
+        by3.append(random(100,300))
+        acx.append(random(200,600))
+        acy.append(random(100,500))
+        acw.append(60*sca[i])
+        ach.append(100*sca[i])
+        acx2.append(random(100,300))
+        acy2.append(random(100,300))
+        sca2.append(random(0.5,0.8))
+        acw2.append(60*sca2[i])
+        ach2.append(100*sca2[i])    
+        ac.append(loadImage("ac"+str(i)+".png"))
+        acs.append(random(-30,30))
+        acs2.append(random(-60,60))
+        dead.append(False)
+        dead2.append(False)
+        
+    for i in range(100):
+        fire0.append(loadImage("fire0.png"))
+        fx0.append(-200)
+        fy.append(3000)
+        
+    for i in range(100):
+        fire1.append(loadImage("fire1.png"))
+        fx1.append(-200)
+        fy.append(3000)
+        
+    for i in range(100):
+        fire2.append(loadImage("fire2.png"))
+        fx2.append(-200)
+        fy.append(3000)
+        
+    for i in range(250):
+        fire3.append(loadImage("fire3.png"))
+        fx3.append(-200)
+        fy.append(3000)
+    for i in range(10):
+        s4.append(random(-10,10))
+        s1.append(random(-20,20))
+        s2.append(random(-30,30))
+        s3.append(random(-45,45))
+        bullet.append(loadImage("bullet"+str(i)+".png"))
+        bullet1.append(loadImage("ba.png"))
+        bullet2.append(loadImage("b"+str(i)+".png"))
+        bullet3.append(loadImage("life.png"))
+def playbomb():
+    global minim    
+    bomb = minim.loadFile('bomb.wav')    
+    bomb.play()    
+    while bomb.isPlaying():
+        pass
+    bomb.rewind()
+    bomb.close() 
+       
+def draw():
+    global score,fx0,fx1,fx2,fx3,fy,dead,n,n1,n2,n3
+    global px,py,s,life,acx,acy,acw,ach,stage,time,ctime
+    if(stage==5):
+        HPW=420
+        score=0
+        bonus()
+    
+    if(stage==-1):
+        global dead,fx0,fx1,fx2,fx3,dead2
+        global HPW
+        HPW=420
+        song1.pause()
+        song1.rewind()
+        song2.pause()
+        song2.rewind()
+        song3.play()
+        image(bg3,0,0,width,height)
+        image(gg,width/2-300,height/2-300,600,400)
+        image(bn2,width/2-100,height/2,300,200)
+        
+        if(mousePressed==True and width/2+200>mouseX>width/2-100 and height/2+200>mouseY>height/2):
+            stage=0
+            life=20
+        for i in range(31):
+            fx0[i]=-200
+            fx1[i]=-200
+            fx2[i]=-200
+            
+        for i in range(100):
+            fx3[i]=-200
+            
+        for i in range(10):
+            dead[i]=False
+            acy[i]=random(200,300)
+            dead2[i]=False
+            acy2[i]=random(100,300)
+        score=0
+            
+    if(stage == 0):
+        global bu,bu1,bu2,bu3,n,n1,n2,n3
+        n=n1=n2=n3=-1
+        bu=bu1=bu2=30
+        bu3=250
+        millis()
+        ctime=millis()
+        song3.pause()
+        song3.rewind()  
+        song1.play()
+        image(bg3,0,0,width,height)
+        image(bn1,530,800,200,100)
+        textSize(90)
+        fill(92,92,237)
+        text("Wellcome to Space fight",100,400)
+        text("Rules:",80,980)
+        textSize(45)
+        fill(92,92,237)
+        text("according to UP DOWN LFET RIGHT to ",350,980)
+        text("control your aircraft, avoid being touched by enemy",50,1045)
+        text("troops, then beat boss win the game",50,1110)
+        text("W to open fire",50,1160)
+        text("I and D to change speed",50,1210)
+        text("space's conditon is perishing",50,1260)
+        text("your life will be reduced with time passing",50,1310)
+        text("get more scores can improve your bullet",50,1360)
+        text("if bullet level is low",50,1410)
+        text("there will be time lag when it destroies enemy",50,1460)
+        fill(255,0,0)
+        text("try to get higher scores there will be bonus",50,1510)
+        
+    if(stage==1):        
+        song1.pause()
+        song1.rewind()
+        song2.play()
+        millis()
+        time=(millis()-ctime)/1000
+        image(bg1,0,0,width,height)
+        image(p,px,py,133,200)
+        
+        textSize(60)
+        fill(255)
+        text("life:"+str(life),20,60)
+        text("score:"+str(score),20,120)
+        text("time:"+str(time),20,180)
+        
+        for i in range(10):
+            if(dead[i]==False):
+                image(ac[i],acx[i],acy[i],acw[i],ach[i])
+                acx[i]=acx[i]+acs[i]
+                acy[i]=acy[i]+8
+            if(0>acx[i] or acx[i]>width-acw[i]):
+                acs[i]=-acs[i]
+            if(acy[i]>height+100):
+                acy[i]=acy[i]-height
+       
+                
+        if(score<=100):
+            global bu
+            if(keyPressed==True and key=="w" or key=="W"):
+                n=n+1
+                fx0[n]=px+40
+                fy[n]=py
+                bu=30-n
+                
+            if(bu==0):
+                stage=-1
+                bu=30
+                n=-1
+                
+            textSize(60)
+            fill(255)
+            text("bullet:"+str(bu),width-270,60)
+            
+            for i in range(31):
+                image(fire0[i],fx0[i],fy[i],20,20)
+                fy[i]=fy[i]-10
+                
+                for m in range(10):
+                    if(acx[m]+acw[m]>fx0[i]>acx[m] and dead[m]==False and acy[m]<fy[i]<acy[m]+ach[m]):
+                        dead[m]=True
+                        
+                        if(dead[m]==True):
+                            playbomb()
+                                       
+                        score=score+20
+                        
+        if(100<score<=200):
+            
+            global bu1
+            
+            if(keyPressed==True and key=="w" or key=="W"):
+                n1=n1+1
+                fx1[n1]=px+40
+                fy[n1]=py
+                bu1=30-n1
+                
+            if(bu1==0):
+                stage=-1
+                bu1=30
+                n1=-1
+                
+            textSize(60)
+            fill(255)
+            text("bullet:"+str(bu1),width-270,60)
+            
+            for i in range(31):            
+                image(fire1[i],fx1[i],fy[i],25,25)
+                fy[i]=fy[i]-10
+                
+                for m in range(10):
+                    if(acx[m]+acw[m]>fx1[i]>acx[m] and dead[m]==False and acy[m]<fy[i]<acy[m]+ach[m]):
+                        dead[m]=True
+                        if(dead[m]==True):
+                            playbomb()
+                            
+                        score=score+20
+                        
+        if(200<score<400):
+            global bu2
+            if(keyPressed==True and key=="w" or key=="W"):
+                n2=n2+1
+                fx2[n2]=px+40
+                fy[n2]=py
+                bu2=30-n2
+                
+            if(bu2==0):
+                stage=-1
+                bu2=30
+                n2=-1
+                
+            textSize(60)
+            fill(255)
+            text("bullet:"+str(bu2),width-270,60)
+            
+            for i in range(31):
+                image(fire2[i],fx2[i],fy[i],30,30)
+                fy[i]=fy[i]-10
+                
+                for m in range(10):
+                    if(acx[m]+acw[m]>fx2[i]>acx[m] and dead[m]==False and acy[m]<fy[i]<acy[m]+ach[m]):
+                        dead[m]=True
+                        if(dead[m]==True):
+                            playbomb()
+                            
+                        score=score+20
+    if(score==200):
+        stage=2
+        
+    if(stage==2):
+        global acx2,acy2,acw2,ach2,dead2,acs2
+        
+        song1.pause()
+        song1.rewind()
+        song2.play()
+        
+        millis()
+        time=(millis()-ctime)/1000
+        image(bg1,0,0,width,height)
+        image(p,px,py,133,200)
+        textSize(60)
+        fill(255)
+        text("life:"+str(life),20,60)
+        text("score:"+str(score),20,120)
+        text("time:"+str(time),20,180)
+        
+        for i in range(10):
+            if(dead2[i]==False):
+                image(ac[i],acx2[i],acy2[i],acw2[i],ach2[i])
+                acx2[i]=acx2[i]+acs2[i]
+                acy2[i]=acy2[i]+8
+            if(0>acx2[i] or acx2[i]>width-acw2[i]):
+                acs2[i]=-acs2[i]
+            if(acy2[i]>height+100):
+                acy2[i]=acy2[i]-height
+            if(acx2[i]+acw2[i]>px>acx2[i]-100 and acy2[i]+ach2[i]>py and py>acy2[i]-200):
+                acy2[i]=acy2[i]-2000
+                life=life-1
+                
+        if(200<=score<400):
+            global bu2
+            if(keyPressed==True and key=="w" or key=="W"):
+                n2=n2+1
+                fx2[n2]=px+40
+                fy[n2]=py
+                bu2=30-n2
+                
+            if(bu2==0):
+                stage=-1
+                bu2=30
+                n2=-1
+                
+            textSize(60)
+            fill(255)
+            text("bullet:"+str(bu2),width-270,60)
+            
+            for i in range(31):
+                image(fire2[i],fx2[i],fy[i],30,30)
+                fy[i]=fy[i]-10
+                for m in range(10):
+                    if(acx2[m]+acw2[m]>fx2[i]>acx2[m] and dead2[m]==False and acy2[m]<fy[i]<acy2[m]+ach2[m]):
+                        dead2[m]=True
+                        
+                        score=score+20
+                        
+    if(score==400):
+        stage=3
+        
+    if(stage==3):
+        global boss,bossx,bossy,HPTX,HP,HPTY,HPX,HPY,HPW,score,bu3,bys,bxs
+        global s1,s2,time,stage,bys1,bxs1,bys2,bxs2,bys3,bxs3,life
+        global bx1,by1,bx2,by2,bx3,by3
+        
+        millis()
+        time=(millis()-ctime)/1000
+        song2.pause()
+        song2.rewind()
+        song1.play()
+        
+        image(bg2,0,0,width,height)
+        image(p,px,py,133,200)
+        image(boss,bossx,bossy,300,300)
+        image(HPT,HPTX,HPTY,450,60)
+        image(HP,HPX,HPY,HPW,40)
+        
+        textSize(60)
+        fill(255)
+        text("life:"+str(life),20,60)
+        text("score:"+str(score),20,120)
+        text("time:"+str(time),20,180)
+        if(HPW<=0):
+            stage=4
+            
+        
+        if(HPW<=100):
+            bossx=bossx+bxs
+            bossy=bossy+bys
+            HPTX=HPTX+bxs
+            HPTY=HPTY+bys
+            HPX=HPX+bxs
+            HPY=HPY+bys 
+            
+            if(bossy<200 or bossy>2000):
+                bys=-bys
+            if(bossx>width-350 or bossx<50):
+                bxs=-bxs
+                
+        if(200>=HPW>100):
+            bossx=bossx+bxs3
+            bossy=bossy+bys3
+            HPTX=HPTX+bxs3
+            HPTY=HPTY+bys3
+            HPX=HPX+bxs3
+            HPY=HPY+bys3
+            
+            if(bossy<200 or bossy>2000):
+                bys3=-bys3
+            if(bossx>width-350 or bossx<50):
+                bxs3=-bxs3
+                
+        if(300>=HPW>200):
+            bossx=bossx+bxs2
+            bossy=bossy+bys2
+            HPTX=HPTX+bxs2
+            HPTY=HPTY+bys2
+            HPX=HPX+bxs2
+            HPY=HPY+bys2
+            
+            if(bossy<200 or bossy>2000):
+                bys2=-bys2
+            if(bossx>width-350 or bossx<50):
+                bxs2=-bxs2
+                
+        if(300<HPW<=420):
+            bossx=bossx+bxs1
+            bossy=bossy+bys1
+            HPTX=HPTX+bxs1
+            HPTY=HPTY+bys1
+            HPX=HPX+bxs1
+            HPY=HPY+bys1
+            
+            if(bossy<200 or bossy>2000):
+                bys1=-bys1
+            if(bossx>width-350 or bossx<50):
+                bxs1=-bxs1
+                
+        if(bu3==0):
+            stage=-1
+            
+        if(400<=score<=600):
+            global bu3
+            if(keyPressed==True and key=="w" or key=="W"):
+                n3=n3+1
+                fy[n3]=py
+                fx3[n3]=px+40
+                bu3=249-n3
+            if(bu3==0):
+                stage=-1
+                bu3=250
+                n3=-1
+                
+            textSize(60)
+            fill(255)
+            text("bullet:"+str(bu3),width-300,60)
+            
+            for i in range(250):
+                image(fire3[i],fx3[i],fy[i],40,40)
+                fy[i]=fy[i]-40 
+                if(bossx+320>fx3[i]>bossx+30 and bossy+30<fy[i]<bossy+320):
+                    fx3[i]=-300
+                    HPW=HPW-2
+                    
+        if(380<HPW<=400):
+            for i in range(10):                    
+                image(bullet[i],bx[i],by[i],70,70)
+                bx[i]=bx[i]+s4[i]
+                by[i]=by[i]+20
+                if(bx[i]>width-80 or bx[i]<0):
+                    s4[i]=-s4[i]
+                if(bx[i]+60>px>bx[i]-100 and by[i]+70>py>by[i]-100):
+                    by[i]=-300
+                    life=life-1
+                    
+        if(200<HPW<=330):
+            for m in range(10):
+                image(bullet1[m],bx1[m],by1[m],70,70) 
+                bx1[m]=bx1[m]+s1[m]
+                by1[m]=by1[m]+30
+                if(bx1[m]>width-80 or bx1[m]<0):
+                    s1[m]=-s1[m]
+                if(bx1[m]+60>px>bx1[m]-100 and by1[m]+70>py>by1[m]-100):
+                    by1[m]=-300
+                    life=life-1
+                    
+        if(100<HPW<150):
+            for k in range(10):
+                image(bullet2[k],bx2[k],by2[k],70,70)                
+                bx2[k]=bx2[k]+s3[k]
+                by2[k]=by2[k]+20
+                if(bx2[k]>width-80 or bx2[k]<0):
+                    s3[k]=-s3[k]
+                if(bx2[k]+60>px>bx2[k]-100 and by2[k]+70>py>by2[k]-100):
+                    by2[k]=-300
+                    life=life-1
+                    
+        if(10<HPW<50):
+            for l in range(10):
+                image(bullet3[l],bx3[l],by3[l],70,70)                          
+                bx3[l]=bx3[l]+s2[l]           
+                by3[l]=by3[l]+10
+                if(bx3[l]>width-80 or bx[l]<0):
+                    s2[l]=-s2[l]
+                
+                
+        if(bossx+250>px>bossx-60 and bossy-100>py>bossy+250):
+            bossx=random(300,500)
+            bossy=random(500,700)
+            life=life-1                                
+    if(keyCode==RIGHT):
+        px=px+s
+    if(keyCode==LEFT):
+        px=px-s
+    if(keyCode==UP):
+        py=py-s
+    if(keyCode==DOWN):
+        py=py+s
+    if(s<40 and keyPressed==True and key=="i" or key== "I" ):
+        s=s+5
+    if(s>0 and key=="d" or key=="D" and keyPressed==True):
+        s=s-5
+    if(px>1380 or px<-133 or py>2200 or py<0):
+        life=life-1
+        px=random(300,800)
+        py=random(1600,1800)
+    if(life==0):
+        stage=-1
+    for i in range(10):
+        if(acx[i]+acw[i]>px>acx[i]-133 and acy[i]+ach[i]>py>acy[i]-200 and py>acy[i]):
+                    acy[i]=acy[i]-2000
+                    life=life-1
+    if(stage == 4):
+        global FinalScores, stime 
+        song2.pause()
+        song2.rewind()
+        song3.pause()
+        song3.rewind()
+        song1.play()
+        FinalScores=score+life*10+(bu+bu1+bu2+bu3)*5-stime
+        celebrate_victory()
+        textSize(100)
+        fill(0)
+        textAlign(CENTER, CENTER)
+        text("Final Scores:"+str(FinalScores),width/2,height/2-400)
+        
+
+    
+def celebrate_victory():
+    background(0, 200, 0) 
+    textSize(60)
+    fill(255)
+    textAlign(CENTER, CENTER)
+    text("Congratulations!", width / 2, height / 2 - 150)
+    text("You Won!", width / 2, height / 2 - 50)
+
+    textSize(50)
+    text("Creator: The Best Student ", width / 2, height / 2 + 50)
+    text("In BU Faculty of Computer Science", width / 2, height / 2 + 100)
+    textSize(150)
+    fill(25,100,100)
+    text("Jimmy Chen", width/2,height/2+200)
+    textSize(80)
+    fill(25,100,100)
+    text("22256024",width/2,height/2+300)
+    
+    h = hour()
+    m = minute()
+    s = second()
+    img=[]
+    for i in range(0,10,1):
+        img.append(loadImage(str(i)+".png"))
+    s1=s%10
+    s2=(s-s1)/10
+    m1=m%10
+    m2=(m-m1)/10
+    h1=h%10
+    h2=(h-h1)/10
+    image(img[h2],100,100,50,100)
+    image(img[h1],210,100,50,100)
+    image(img[m2],320,100,50,100)
+    image(img[m1],430,100,50,100)
+    image(img[s2],540,100,50,100)
+    image(img[s1],650,100,50,100)
+    for x in range(0,400,205):
+        fill(0)
+        circle(x+300,130,8)
+        circle(x+300,160,8)
+def mousePressed():
+    global stage
+    if(stage==0 and 730>mouseX>=530 and 900>mouseY>800):
+        stage=stage+1
+    global FinalScores        
+    if(FinalScores>=1000 and 650>mouseX>100 and 150>mouseY>50):
+       stage=5
+def keyPressed():
+    global stage,score,HPW
+    if(key=="3"):
+        stage=3
+        score=400
+    if(key=="4"):
+        HPW=30
+    if(key=="5"):
+        HPW=125
+    if(key=="6"):
+        stage=4
+def bonus():
+    song1.pause()
+    song1.rewind()
+    song2.pause()
+    song2.rewind()
+    song4.play()
+    background(0)
+    translate(width / 2, height / 2)
+    stroke(255)
+    strokeWeight(8)
+    noFill()
+    ellipse(0, 0, 1000, 1000)
+    textSize(48)
+    fill(255)
+    textAlign(CENTER, CENTER)
+    for i in range(1, 13):
+        angle = map(i, 1, 12, 30, 360)
+        x = 440 * cos(radians(angle - 90))
+        y = 440 * sin(radians(angle - 90))
+        text(i, x, y)
+
+    for i in range(3):
+        angle = map(second() if i == 0 else minute() if i == 1 else hour() % 12, 0, 60 if i < 2 else 12, 0, 360)
+        x = (350 if i == 0 else 250 if i == 1 else 150) * cos(radians(angle - 90))
+        y = (350 if i == 0 else 250 if i == 1 else 150) * sin(radians(angle - 90))
+        strokeWeight(8 if i < 2 else 12)
+        line(0, 0, x, y)
+        ellipse(x, y, 20 if i < 2 else 30, 20 if i < 2 else 30)
+
+    rotate(radians(frameCount % 360))
+    strokeWeight(3)
+    fill(255, 0, 0)
+    ellipse(0, 0, 75, 75)
+    fill(130,200,90)
+    textSize(40)
+    text("Eason", 0, 0)
+   
+
+                      
